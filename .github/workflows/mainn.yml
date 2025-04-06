@@ -1,0 +1,19 @@
+name: Facebook Stream
+
+on:
+  workflow_dispatch:
+
+jobs:
+  stream:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Install FFmpeg
+        run: sudo apt update && sudo apt install -y ffmpeg
+
+      - name: Start Facebook Live Stream
+        run: |
+          ffmpeg -re -i "https://d3g87jnubafe6a.cloudfront.net/out/v1/1fa0fb3c8dec402994a6f7a7f6492b82/index_5.m3u8" \
+          -c:v libx264 -preset veryfast -maxrate 3000k -bufsize 6000k \
+          -c:a aac -b:a 128k -ar 44100 -f flv \
+          "rtmps://live-api-s.facebook.com:443/rtmp/FB-122175451958313606-0-Ab3itLp4vM7IrnYw10IK5RPm"
